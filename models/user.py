@@ -1,6 +1,4 @@
 #!/usr/bin/python3
-"""This module defines a class User"""
-from models.base_model import BaseModel
 """ holds class User"""
 import models
 from models.base_model import BaseModel, Base
@@ -10,12 +8,6 @@ from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
 
-class User(BaseModel):
-    """This class defines a user by various attributes"""
-    email = ''
-    password = ''
-    first_name = ''
-    last_name = ''
 class User(BaseModel, Base):
     """Representation of a user """
     if models.storage_t == 'db':
