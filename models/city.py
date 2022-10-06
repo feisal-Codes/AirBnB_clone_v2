@@ -1,22 +1,30 @@
 #!/usr/bin/python3
-from os import getenv
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+"""This is the city class"""
 from models.base_model import BaseModel, Base
-import models
-from models.state import State
+from sqlalchemy import Column, String, ForeignKey, Integer
+from sqlalchemy.orm import relationship
+from os import environ
+from uuid import uuid4
 
-
-class City(BaseModel, Base):
-    '''
-        Define the class City that inherits from BaseModel.
-    '''
-    __tablename__ = "cities"
-    if getenv("HBNB_TYPE_STORAGE") == "db":
-        name = Column(String(128), nullable=False)
+s = "HBNB_TYPE_STORAGE"
+if s in environ.keys() and environ["HBNB_TYPE_STORAGE"] == "db":
+    class City(BaseModel, Base):
+        '''
+        This is the class for City Attributes
+        '''
+        __tablename__ = "cities"
         state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
-        places = relationship("Place", backref="cities",
-                              cascade="all, delete, delete-orphan")
-    else:
+        name = Column(String(128), nullable=False)
+        places = relationship("Place", backref="cities", cascade="all,delete")
+
+        def __init__(self, **kwargs):
+            setattr(self, "id", str(uuid4()))
+            for i, j in kwargs.items():
+                setattr(self, i, j)
+else:
+    class City(BaseModel):
+        '''
+        This is the class for City
+        '''
         state_id = ""
         name = ""
